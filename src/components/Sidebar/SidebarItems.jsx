@@ -5,6 +5,7 @@ import ProfileLink from "./ProfileLink";
 import Search from "./Search";
 import Contact from "./Contact";
 import Users from "./Users";
+import Message from "./Message";
 
 const SidebarItems = () => {
 	return (
@@ -16,6 +17,7 @@ const SidebarItems = () => {
 			<CreatePost />
 			<ProfileLink />
 			<Contact />
+			<Message />
 		</>
 	);
 };
