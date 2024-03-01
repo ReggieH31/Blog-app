@@ -15,7 +15,9 @@ import {
 	ModalOverlay,
 	Stack,
 } from "@chakra-ui/react";
+import { Link } from "react-router-dom"; // Import Link from react-router-dom
 import { useRef, useState } from "react";
+import { auth } from "../../firebase/firebase";
 import useAuthStore from "../../store/authStore";
 import usePreviewImg from "../../hooks/usePreviewImg";
 import useEditProfile from "../../hooks/useEditProfile";
@@ -27,6 +29,19 @@ const EditProfile = ({ isOpen, onClose }) => {
 		username: "",
 		bio: "",
 	});
+	const handleResetPassword = () => {
+		const user = auth.currentUser;
+		const email = user.email;
+
+		auth
+			.sendPasswordResetEmail(email)
+			.then(() => {
+				showToast("Success", "Password reset email sent successfully", "success");
+			})
+			.catch((error) => {
+				showToast("Error", error.message, "error");
+			});
+	};
 	const authUser = useAuthStore((state) => state.user);
 	const fileRef = useRef(null);
 	const { handleImageChange, selectedFile, setSelectedFile } = usePreviewImg();
@@ -71,6 +86,8 @@ const EditProfile = ({ isOpen, onClose }) => {
 												Edit Profile Picture
 											</Button>
 										</Center>
+
+
 										<Input type='file' hidden ref={fileRef} onChange={handleImageChange} />
 									</Stack>
 								</FormControl>
@@ -119,6 +136,7 @@ const EditProfile = ({ isOpen, onClose }) => {
 									>
 										Cancel
 									</Button>
+
 									<Button
 										bg={"blue.400"}
 										color={"white"}
@@ -128,7 +146,20 @@ const EditProfile = ({ isOpen, onClose }) => {
 										onClick={handleEditProfile}
 										isLoading={isUpdating}
 									>
-										Submit
+										Save
+									</Button>
+
+									<Button
+										as={Link}
+										to="/ForgotPassword"
+										bg={"purple.400"}
+										color={"white"}
+										w="full"
+										size="sm"
+										_hover={{ bg: "purple.500" }}
+										onClick={handleResetPassword}
+									>
+										Reset Password
 									</Button>
 								</Stack>
 							</Stack>
@@ -141,94 +172,3 @@ const EditProfile = ({ isOpen, onClose }) => {
 };
 
 export default EditProfile;
-
-// COPY AND PASTE IT AS THE STARTED EDIT PROFILE MODAL
-// import {
-// 	Avatar,
-// 	Button,
-// 	Center,
-// 	Flex,
-// 	FormControl,
-// 	FormLabel,
-// 	Heading,
-// 	Input,
-// 	Modal,
-// 	ModalBody,
-// 	ModalCloseButton,
-// 	ModalContent,
-// 	ModalHeader,
-// 	ModalOverlay,
-// 	Stack,
-// } from "@chakra-ui/react";
-
-// const EditProfile = ({ isOpen, onClose }) => {
-// 	return (
-// 		<>
-// 			<Modal isOpen={isOpen} onClose={onClose}>
-// 				<ModalOverlay />
-// 				<ModalContent bg={"black"} boxShadow={"xl"} border={"1px solid gray"} mx={3}>
-// 					<ModalHeader />
-// 					<ModalCloseButton />
-// 					<ModalBody>
-// 						{/* Container Flex */}
-// 						<Flex bg={"black"}>
-// 							<Stack spacing={4} w={"full"} maxW={"md"} bg={"black"} p={6} my={0}>
-// 								<Heading lineHeight={1.1} fontSize={{ base: "2xl", sm: "3xl" }}>
-// 									Edit Profile
-// 								</Heading>
-// 								<FormControl>
-// 									<Stack direction={["column", "row"]} spacing={6}>
-// 										<Center>
-// 											<Avatar size='xl' src={""} border={"2px solid white "} />
-// 										</Center>
-// 										<Center w='full'>
-// 											<Button w='full'>Edit Profile Picture</Button>
-// 										</Center>
-// 									</Stack>
-// 								</FormControl>
-
-// 								<FormControl>
-// 									<FormLabel fontSize={"sm"}>Full Name</FormLabel>
-// 									<Input placeholder={"Full Name"} size={"sm"} type={"text"} />
-// 								</FormControl>
-
-// 								<FormControl>
-// 									<FormLabel fontSize={"sm"}>Username</FormLabel>
-// 									<Input placeholder={"Username"} size={"sm"} type={"text"} />
-// 								</FormControl>
-
-// 								<FormControl>
-// 									<FormLabel fontSize={"sm"}>Bio</FormLabel>
-// 									<Input placeholder={"Bio"} size={"sm"} type={"text"} />
-// 								</FormControl>
-
-// 								<Stack spacing={6} direction={["column", "row"]}>
-// 									<Button
-// 										bg={"red.400"}
-// 										color={"white"}
-// 										w='full'
-// 										size='sm'
-// 										_hover={{ bg: "red.500" }}
-// 									>
-// 										Cancel
-// 									</Button>
-// 									<Button
-// 										bg={"blue.400"}
-// 										color={"white"}
-// 										size='sm'
-// 										w='full'
-// 										_hover={{ bg: "blue.500" }}
-// 									>
-// 										Submit
-// 									</Button>
-// 								</Stack>
-// 							</Stack>
-// 						</Flex>
-// 					</ModalBody>
-// 				</ModalContent>
-// 			</Modal>
-// 		</>
-// 	);
-// };
-
-// export default EditProfile;

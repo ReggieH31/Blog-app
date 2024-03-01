@@ -12,12 +12,16 @@ const useSearchUsersPosts = () => {
 		setIsLoading(true);
 		setPosts([]);
 		try {
-			let q = query(collection(firestore, 'posts'), where('category', '==', category));
+            let q = collection(firestore, 'posts');
 
-			// Add conditions for condition and price if provided
-			if (condition) {
-				q = query(q, where('condition', '==', condition));
-			}
+            // Add conditions for category and condition if provided
+            if (category) {
+                q = query(q, where('category', '==', category));
+            }
+            if (condition) {
+                q = query(q, where('condition', '==', condition));
+            }
+
 			
 			const querySnapshot = await getDocs(q);
 

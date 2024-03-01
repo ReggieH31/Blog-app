@@ -17,7 +17,7 @@ import {
 import { FaPhoneAlt, FaEnvelope, FaTwitter } from "react-icons/fa";
 import { GoLocation } from "react-icons/go";
 import { AiFillPhone } from "react-icons/ai";
-
+import { ContactLogo } from "../../assets/constants";
 import emailjs from "@emailjs/browser";
 import { toast } from "react-toastify";
 
@@ -32,24 +32,13 @@ const Contact = () => {
 	const sendEmail = async (e) => {
 		e.preventDefault();
 
-		const data = {
-			name: name,
-			email: email,
-			subject: subject,
-			message: message
-		};
-
+	
 		try {
-			await fetch('/sendEmail', {
-				method: 'POST',
-				headers: {
-					'Content-Type': 'application/json',
-				},
-				body: JSON.stringify(data),
-			});
+			await emailjs.sendForm("service_lbxhzp7", "template_d8m16d9", form.current, "S1feABzSbY33xagM7");
 			toast.success("Message sent successfully");
 		} catch (error) {
-			toast.error(error.message);
+			toast.error("Failed to send message. Please try again later.");
+			console.error("EmailJS Error:", error);
 		}
 
 		// Reset form fields after submission
@@ -57,7 +46,6 @@ const Contact = () => {
 		setEmail("");
 		setSubject("");
 		setMessage("");
-
 		onClose();
 	};
 
@@ -83,8 +71,7 @@ const Contact = () => {
 					onClick={onOpen}
 				>
 					<AiFillPhone size={25} />
-					<Box>Contact</Box>
-				</Flex>
+					<Box display={{ base: "none", md: "block" }}>Contact</Box>				</Flex>
 			</Tooltip>
 
 			<Modal isOpen={isOpen} onClose={onClose} size="xl">
@@ -95,7 +82,7 @@ const Contact = () => {
 						<form ref={form} onSubmit={sendEmail}>
 							<Textarea
 								type="text"
-								name="user_name"
+								name="from_name"
 								placeholder="Full Name"
 								value={name}
 								onChange={(e) => setName(e.target.value)}
@@ -105,7 +92,7 @@ const Contact = () => {
 							<Textarea
 								mt={4}
 								type="email"
-								name="user_email"
+								name="from_email"
 								placeholder="Your active email"
 								value={email}
 								onChange={(e) => setEmail(e.target.value)}
@@ -190,11 +177,7 @@ const Contact = () => {
 						<strong>Questions</strong>
 						<br />
 						If you have any questions regarding this Privacy Policy, please contact using the form above. We will respond to your inquiry as soon as possible.
-
-
-
-
-					</Text>
+						</Text>
 				</ModalContent>
 			</Modal>
 		</>
@@ -202,3 +185,5 @@ const Contact = () => {
 };
 
 export default Contact;
+
+
