@@ -97,7 +97,6 @@ const CreatePost = () => {
 							onChange={(e) => setCaption(e.target.value)}
 						/>
 
-
 						<Textarea
 							placeholder='Post description...'
 							value={description}

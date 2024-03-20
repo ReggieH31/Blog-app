@@ -66,6 +66,7 @@ export default FeedPosts;
 /*
 
 selectedCondition for getPostDetails
+
 <Select
 						pr="4.5rem"
 						placeholder="Condition"

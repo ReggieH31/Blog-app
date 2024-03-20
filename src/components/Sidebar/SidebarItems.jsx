@@ -11,7 +11,6 @@ const SidebarItems = () => {
 		<>
 			<Home />
 			<Users />
-			<Notifications />
 			<CreatePost />
 			<ProfileLink />
 			<Contact />

@@ -13,6 +13,11 @@ const useGetUserProfileByUsername = (username) => {
 		const getUserProfile = async () => {
 			setIsLoading(true);
 			try {
+				if (!username) {
+					// Handle the case where the username parameter is undefined
+					return;
+				}
+
 				const q = query(collection(firestore, "users"), where("username", "==", username));
 				const querySnapshot = await getDocs(q);
 

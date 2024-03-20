@@ -27,13 +27,7 @@ const FeedPost = ({ post }) => {
           alignItems={"center"}
         >
           {/* Display Post Context */}
-          <Box textAlign="center" color="white">
-            {post.caption && <Text fontWeight={"bold"} fontSize={18} mb={2}>Title: {post.caption}</Text>}
-            {post.description && <Text fontSize={16} mb={2}>Description: {post.description}</Text>}
-            {post.category && <Text fontSize={14} mb={2}>Category: {post.category}</Text>}
-            {post.condition && <Text fontSize={16} mb={2}>Condition: {post.condition}</Text>}
-            {post.price && <Text fontSize={16} mb={2}>Price: {post.price}</Text>}
-          </Box>
+       
         </Flex>
       </Flex>
       <PostFooter post={post} creatorProfile={userProfile} />

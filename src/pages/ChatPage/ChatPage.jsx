@@ -1,27 +1,58 @@
-import { Box, Flex, VStack, Input, Button, Text, Avatar, SkeletonCircle, Skeleton, Link } from '@chakra-ui/react';
-import React, { useState } from 'react';
+import { Box, Flex, VStack, Input, Button, Text, Avatar } from '@chakra-ui/react';
+import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom'; // Add this line to import Link
+import { useLocation } from 'react-router-dom'; // Add this line to import useLocation
+import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
+import { db } from '../../firebase/firebase'; // Update the import path
 
 const ChatPage = () => {
   const [messages, setMessages] = useState([]);
   const [inputValue, setInputValue] = useState('');
+  const [senderUsername, setSenderUsername] = useState('');
+  const [senderProfilePic, setSenderProfilePic] = useState('');
+  
+  const location = useLocation();
 
-  const handleMessageSend = () => {
+  useEffect(() => {
+    const params = new URLSearchParams(location.search);
+    const username = params.get('username');
+    const profilePic = params.get('profilePic');
+
+    setSenderUsername(username);
+    setSenderProfilePic(profilePic);
+  }, [location]);
+
+  // Function to send a message and store it in Firebase Firestore
+  const sendMessage = async () => {
     if (inputValue.trim() !== '') {
       const now = new Date();
       const hours = (now.getHours() % 12 || 12).toString().padStart(2, '0'); // Convert to 12-hour format
       const minutes = now.getMinutes().toString().padStart(2, '0');
       const ampm = now.getHours() >= 12 ? 'PM' : 'AM';
       const timestamp = `${hours}:${minutes} ${ampm}`;
-      
+
       const newMessage = {
         content: inputValue,
         timestamp: timestamp
       };
-      setMessages([...messages, newMessage]);
-      setInputValue('');
+
+      try {
+        // Add the message to Firebase Firestore
+        const docRef = await addDoc(collection(db, 'messages'), {
+          content: newMessage.content,
+          timestamp: serverTimestamp()
+        });
+
+        console.log('Message written with ID: ', docRef.id);
+
+        // Update the local state with the new message
+        setMessages([...messages, newMessage]);
+        setInputValue('');
+      } catch (error) {
+        console.error('Error adding document: ', error);
+      }
     }
   };
-  
 
   return (
     <Flex>
@@ -53,7 +84,6 @@ const ChatPage = () => {
           </VStack>
         </Flex>
       </Box>
-      
       {/* Right side */}
       <Box
         height={"100vh"}
@@ -89,10 +119,10 @@ const ChatPage = () => {
             value={inputValue}
             onChange={(e) => setInputValue(e.target.value)}
             onKeyPress={(e) => {
-              if (e.key === 'Enter') handleMessageSend();
+              if (e.key === 'Enter') sendMessage();
             }}
           />
-          <Button colorScheme="blue" onClick={handleMessageSend}>Send</Button>
+          <Button colorScheme="blue" onClick={sendMessage}>Send</Button>
         </Flex>
       </Box>
     </Flex>
@@ -100,3 +130,5 @@ const ChatPage = () => {
 };
 
 export default ChatPage;
+
+

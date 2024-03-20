@@ -25,7 +25,7 @@ const ProfileTabs = () => {
 					<BsSuitHeart fontWeight={"bold"} />
 				</Box>
 				<Text fontSize={12} display={{ base: "none", sm: "block" }}>
-					Likes
+					Favorites
 				</Text>
 			</Flex>
 		</Flex>
