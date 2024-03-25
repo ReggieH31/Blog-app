@@ -20,14 +20,7 @@ const ProfileTabs = () => {
 			</Flex>
 
 
-			<Flex alignItems={"center"} p='3' gap={1} cursor={"pointer"}>
-				<Box fontSize={20}>
-					<BsSuitHeart fontWeight={"bold"} />
-				</Box>
-				<Text fontSize={12} display={{ base: "none", sm: "block" }}>
-					Favorites
-				</Text>
-			</Flex>
+			
 		</Flex>
 	);
 };
